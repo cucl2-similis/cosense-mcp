@@ -11,6 +11,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import com.github.cucl2_similis.cosensemcp.config.CosenseProperties;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
 /**
- * documents/test-spec.md の SP-01〜SP-05 と GP-01〜GP-06 に対応する。
+ * documents/test-spec.md の SP-01〜SP-05 と GP-01〜GP-06 に対応する.
  */
 class CosenseApiServiceTest {
 
@@ -29,6 +30,13 @@ class CosenseApiServiceTest {
     private MockRestServiceServer server;
 
     private CosenseApiService service;
+
+    @AfterEach
+    void tearDown() {
+        if (this.server != null) {
+            this.server.verify();
+        }
+    }
 
     @BeforeEach
     void setUp() {

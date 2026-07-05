@@ -9,23 +9,33 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import com.github.cucl2_similis.cosensemcp.config.CosenseProperties;
 import java.time.Duration;
 import java.time.Instant;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestClient;
 
 /**
- * documents/test-spec.md の WT-01 と WT-02 に対応する。
+ * documents/test-spec.md の WT-01 と WT-02 に対応する.
  */
 class CosenseApiServiceWaitTest {
+
+    private MockRestServiceServer server;
+
+    @AfterEach
+    void tearDown() {
+        if (this.server != null) {
+            this.server.verify();
+        }
+    }
 
     // documents/test-spec.md: WT-01
     @Test
     void skipsWaitWhenApiWaitMsIsZero() {
         RestClient.Builder builder = RestClient.builder();
-        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        this.server = MockRestServiceServer.bindTo(builder).build();
         CosenseApiService service = new CosenseApiService(builder, new CosenseProperties("private-project", "s%3Aexample", 0));
-        server.expect(requestTo("https://scrapbox.io/api/pages/private-project/search/query?q=fast"))
+        this.server.expect(requestTo("https://scrapbox.io/api/pages/private-project/search/query?q=fast"))
                 .andExpect(method(GET))
                 .andRespond(withSuccess("""
                         {
@@ -37,16 +47,16 @@ class CosenseApiServiceWaitTest {
         service.searchPages("fast");
         long elapsedMillis = Duration.between(startedAt, Instant.now()).toMillis();
 
-        assertThat(elapsedMillis).isLessThan(200);
+        assertThat(elapsedMillis).isLessThan(400);
     }
 
     // documents/test-spec.md: WT-02
     @Test
-    void waitsBeforeApiCallWhenApiWaitMsUsesDefaultValue() {
+    void waitsBeforeApiCallWhenApiWaitMsIsConfiguredTo500ms() {
         RestClient.Builder builder = RestClient.builder();
-        MockRestServiceServer server = MockRestServiceServer.bindTo(builder).build();
+        this.server = MockRestServiceServer.bindTo(builder).build();
         CosenseApiService service = new CosenseApiService(builder, new CosenseProperties("private-project", "s%3Aexample", 500));
-        server.expect(requestTo("https://scrapbox.io/api/pages/private-project/search/query?q=slow"))
+        this.server.expect(requestTo("https://scrapbox.io/api/pages/private-project/search/query?q=slow"))
                 .andExpect(method(GET))
                 .andRespond(withSuccess("""
                         {

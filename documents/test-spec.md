@@ -11,7 +11,7 @@
 ## 2. 対象範囲
 
 - **MCPツール**  
-  `cosense_search_pages` / `cosense_get_page`
+  `cosense_get_page`（現行実装） / `cosense_search_pages`（提供予定）
 - **サービス層**  
   Cosense API 呼び出し、レスポンス変換、ウェイト制御、
   HTTPステータスに応じたエラーマッピング
@@ -58,14 +58,14 @@
 | ID | 観点 | 条件 | 期待結果 |
 | --- | --- | --- | --- |
 | WT-01 | 設定反映 | `cosense.api-wait-ms=0` | API呼び出し前の待機をスキップできる |
-| WT-02 | 既定値 | `cosense.api-wait-ms` 未指定 | API呼び出し前に約500msの待機が入る |
+| WT-02 | 設定反映 | `cosense.api-wait-ms=500` | API呼び出し前に約500msの待機が入る |
 
 ### 4.4 コンテキスト起動
 
 | ID | 観点 | 条件 | 期待結果 |
 | --- | --- | --- | --- |
 | CT-01 | 起動確認 | 必須設定を与えてコンテキスト起動 | `CosenseMcpApplication` が正常起動する |
-| CT-02 | ツール公開 | コンテキスト起動後に Controller を取得 | `cosense_search_pages` と `cosense_get_page` の公開に必要な構成が成立する |
+| CT-02 | ツール公開 | コンテキスト起動後に Controller を取得 | `cosense_get_page` の公開と `cosense_search_pages` 追加に必要な構成が成立する |
 
 ## 5. テスト実施順
 

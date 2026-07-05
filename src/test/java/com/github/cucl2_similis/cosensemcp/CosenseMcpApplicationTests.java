@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * documents/test-spec.md の CT-01 と CT-02 に対応する。
+ * documents/test-spec.md の CT-01 と CT-02 に対応する.
  */
 @SpringBootTest(properties = {
         "cosense.project-name=test-project",
