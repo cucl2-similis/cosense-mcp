@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: cosense-mcp
+  main:
+    banner-mode: "off"
