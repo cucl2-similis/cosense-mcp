@@ -3,3 +3,8 @@ spring:
     name: cosense-mcp
   main:
     banner-mode: "off"
+
+cosense:
+  project-name: ${COSENSE_PROJECT_NAME}
+  connect-sid: ${COSENSE_CONNECT_SID}
+  api-wait-ms: 500

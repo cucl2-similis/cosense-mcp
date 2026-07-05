@@ -106,7 +106,8 @@ cosense-mcp/
     │   │               └ cosensemcp/
     │   │                   ├ CosenseMcpApplication.java      # エントリポイント
     │   │                   ├ config/
-    │   │                   │   └ McpConfig.java             # RestClient.Builder Beanの登録
+    │   │                   │   ├ CosenseProperties.java     # cosense.* の設定プロパティ
+    │   │                   │   └ RestClientConfig.java      # RestClient.Builder Beanの登録
     │   │                   ├ controller/
     │   │                   │   └ CosenseMcpController.java  # MCPツールの登録（@McpTool）
     │   │                   ├ dto/
