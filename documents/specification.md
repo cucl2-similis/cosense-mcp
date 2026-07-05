@@ -104,9 +104,10 @@ cosense-mcp/
     │   │       └ github/
     │   │           └ cucl2_similis/
     │   │               └ cosensemcp/
-    │   │                   ├ McpCosenseApplication.java      # エントリポイント
+    │   │                   ├ CosenseMcpApplication.java      # エントリポイント
     │   │                   ├ config/
-    │   │                   │   └ McpConfig.java             # RestClient.Builder Beanの登録
+    │   │                   │   ├ CosenseProperties.java     # cosense.* の設定プロパティ
+    │   │                   │   └ RestClientConfig.java      # RestClient.Builder Beanの登録
     │   │                   ├ controller/
     │   │                   │   └ CosenseMcpController.java  # MCPツールの登録（@McpTool）
     │   │                   ├ dto/
@@ -125,7 +126,7 @@ cosense-mcp/
                 └ github/
                     └ cucl2_similis/
                         └ cosensemcp/
-                            ├ McpCosenseApplicationTests.java    # コンテキスト起動テスト
+                            ├ CosenseMcpApplicationTests.java    # コンテキスト起動テスト
                             └ service/
                                 ├ CosenseApiServiceTest.java     # CosenseApiServiceの単体テスト
                                 └ CosenseApiServiceWaitTest.java # ウェイト動作の検証テスト
@@ -149,7 +150,7 @@ cosense-mcp/
 - **ウェイト検証テスト（`CosenseApiServiceWaitTest`）**  
   デフォルト500msのウェイトが実際に挿入されることを計測ベースで検証する。
 
-- **コンテキストテスト（`McpCosenseApplicationTests`）**  
+- **コンテキストテスト（`CosenseMcpApplicationTests`）**  
   Springコンテキスト全体が正常に起動できることを確認する統合テスト。
 
 ## 8. セットアップ・起動方法
