@@ -126,13 +126,23 @@ public class CosenseApiService {
     /**
      * 4xx 応答を、利用者に意味が伝わる文言へ変換する.
      *
+     * <p>404 はエンドポイントによって意味が異なるため、<br>
+     * ページ API の場合のみ「ページ未検出」として扱い、<br>
+     * 検索 API の場合はリクエストエラーと同様に扱う。
+     *
+     * @param request 失敗した HTTP リクエスト
      * @param statusCode Cosense API が返した HTTP ステータス
      * @return 呼び出し側へ返すエラーメッセージ
      */
-    private String mapClientErrorMessage(int statusCode) {
+    private String mapClientErrorMessage(HttpRequest request, int statusCode) {
         return switch (statusCode) {
             case 401 -> "認証エラー: connect.sidが無効か期限切れです";
-            case 404 -> "指定したページが見つかりません";
+            case 404 -> {
+                if (request.getURI().getPath().contains("/search/query")) {
+                    yield "リクエストエラーが発生しました (HTTP " + statusCode + ")";
+                }
+                yield "指定したページが見つかりません";
+            }
             default -> "リクエストエラーが発生しました (HTTP " + statusCode + ")";
         };
     }
@@ -155,7 +165,7 @@ public class CosenseApiService {
      * @throws java.io.IOException 応答読み取り時の I/O エラー
      */
     private void handleClientError(HttpRequest request, ClientHttpResponse response) throws java.io.IOException {
-        throw new CosenseApiException(mapClientErrorMessage(response.getStatusCode().value()));
+        throw new CosenseApiException(mapClientErrorMessage(request, response.getStatusCode().value()));
     }
 
     /**

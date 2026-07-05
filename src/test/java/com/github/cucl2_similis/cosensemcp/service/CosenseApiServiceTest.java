@@ -92,6 +92,18 @@ class CosenseApiServiceTest {
                 .hasMessage("認証エラー: connect.sidが無効か期限切れです");
     }
 
+    // documents/test-spec.md: SP-04 (404 も401以外の4xxとしてリクエストエラー扱い)
+    @Test
+    void searchPagesMaps404ToReadableMessage() {
+        this.server.expect(requestTo("https://scrapbox.io/api/pages/private-project/search/query?q=missing"))
+                .andExpect(method(GET))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
+
+        assertThatThrownBy(() -> this.service.searchPages("missing"))
+                .isInstanceOf(CosenseApiException.class)
+                .hasMessage("リクエストエラーが発生しました (HTTP 404)");
+    }
+
     // documents/test-spec.md: SP-04
     @Test
     void searchPagesMapsOther4xxToReadableMessage() {

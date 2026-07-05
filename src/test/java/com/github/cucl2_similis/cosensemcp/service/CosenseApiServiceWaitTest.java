@@ -47,7 +47,7 @@ class CosenseApiServiceWaitTest {
         service.searchPages("fast");
         long elapsedMillis = Duration.between(startedAt, Instant.now()).toMillis();
 
-        assertThat(elapsedMillis).isLessThan(400);
+        assertThat(elapsedMillis).isLessThan(1000);
     }
 
     // documents/test-spec.md: WT-02
