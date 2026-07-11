@@ -24,6 +24,9 @@
 - **単体テスト**  
   `CosenseApiService` を対象に、Cosense API 通信結果の変換、
   エラーマッピング、待機設定の適用を検証する。
+- **コントローラテスト**  
+  `CosenseMcpController` を対象に、MCP ツール公開メソッドが
+  `CosenseApiService` を使って検索結果を返せることを検証する。
 - **コンテキストテスト**  
   `CosenseMcpApplication` の起動と、MCPツール公開に必要な Bean の
   構成が成立することを確認する。
@@ -67,12 +70,21 @@
 | CT-01 | 起動確認 | 必須設定を与えてコンテキスト起動 | `CosenseMcpApplication` が正常起動する |
 | CT-02 | ツール公開 | コンテキスト起動後に Controller を取得 | `cosense_get_page` の公開と `cosense_search_pages` 追加に必要な構成が成立する |
 
+### 4.5 `cosense_search_pages` のMCPツール公開
+
+| ID | 観点 | 条件 | 期待結果 |
+| --- | --- | --- | --- |
+| MP-01 | 正常系 | `CosenseApiService#searchPages` が複数件を返す | `cosense_search_pages` が同じタイトル一覧を返す |
+| MP-02 | 正常系 | `CosenseApiService#searchPages` が空リストを返す | `cosense_search_pages` が空リストを返す |
+| MP-03 | 異常系 | `CosenseApiService#searchPages` が `CosenseApiException` を送出する | 例外を握りつぶさず呼び出し側へ伝播する |
+
 ## 5. テスト実施順
 
 1. `cosense_search_pages` の単体テストを追加し、Red を確認する。
 2. `cosense_get_page` の単体テストを追加し、Red を確認する。
 3. エラーマッピングの単体テストを追加し、Red を確認する。
 4. ウェイト制御のテストを追加し、Red を確認する。
-5. コンテキスト起動テストを追加または更新し、Red を確認する。
-6. 実装後に `./mvnw clean test` を実行し、全件 Green を確認する。
-7. `./mvnw clean package` 後に MCP Inspector で実機確認する。
+5. `cosense_search_pages` のコントローラテストを追加し、Red を確認する。
+6. コンテキスト起動テストを追加または更新し、Red を確認する。
+7. 実装後に `./mvnw clean test` を実行し、全件 Green を確認する。
+8. `./mvnw clean package` 後に MCP Inspector で実機確認する。
