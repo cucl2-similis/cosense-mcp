@@ -2,10 +2,9 @@
 
 ## 1. 目的
 
-- フェーズ1の参照系機能である `cosense_search_pages` と
-  `cosense_get_page` について、要件定義書とシステム仕様書に沿った
-  テスト観点を明確化する。
-- 実装は本仕様書に基づいて Red → Green → Refactor で進め、
+- フェーズ1の参照系機能である `cosense_search_pages` と `cosense_get_page` について、  
+  要件定義書とシステム仕様書に沿ったテスト観点を明確化する。
+- 実装は本仕様書に基づいて Red → Green → Refactor で進め、  
   仕様追加や修正が発生した場合は本書とテストコードを同時に更新する。
 
 ## 2. 対象範囲
@@ -13,8 +12,7 @@
 - **MCPツール**  
   `cosense_get_page`（現行実装） / `cosense_search_pages`（提供予定）
 - **サービス層**  
-  Cosense API 呼び出し、レスポンス変換、ウェイト制御、
-  HTTPステータスに応じたエラーマッピング
+  Cosense API 呼び出し、レスポンス変換、ウェイト制御、HTTPステータスに応じたエラーマッピング
 - **設定**  
   `cosense.project-name` / `cosense.connect-sid` /
   `cosense.api-wait-ms`
@@ -22,14 +20,12 @@
 ## 3. テストレベル
 
 - **単体テスト**  
-  `CosenseApiService` を対象に、Cosense API 通信結果の変換、
-  エラーマッピング、待機設定の適用を検証する。
+  `CosenseApiService` を対象に、Cosense API 通信結果の変換、エラーマッピング、待機設定の適用を検証する。
 - **コントローラテスト**  
-  `CosenseMcpController` を対象に、MCP ツール公開メソッドが
-  `CosenseApiService` を使って検索結果を返せることを検証する。
+  `CosenseMcpController` を対象に、MCPツール公開メソッドが  
+  `CosenseApiService` を使って検索結果やページ本文を返せることを検証する。
 - **コンテキストテスト**  
-  `CosenseMcpApplication` の起動と、MCPツール公開に必要な Bean の
-  構成が成立することを確認する。
+  `CosenseMcpApplication` の起動と、MCPツール公開に必要な Bean の構成が成立することを確認する。
 - **実機確認**  
   JAR ビルド後に MCP Inspector からツール一覧と応答を確認する。
 
@@ -78,6 +74,13 @@
 | MP-02 | 正常系 | `CosenseApiService#searchPages` が空リストを返す | `cosense_search_pages` が空リストを返す |
 | MP-03 | 異常系 | `CosenseApiService#searchPages` が `CosenseApiException` を送出する | 例外を握りつぶさず呼び出し側へ伝播する |
 
+### 4.6 `cosense_get_page` のMCPツール公開
+
+| ID | 観点 | 条件 | 期待結果 |
+| --- | --- | --- | --- |
+| MG-01 | 正常系 | `CosenseApiService#getPageContent` が本文文字列を返す | `cosense_get_page` が同じ本文を返す |
+| MG-02 | 異常系 | `CosenseApiService#getPageContent` が `CosenseApiException` を送出する | 例外を握りつぶさず呼び出し側へ伝播する |
+
 ## 5. テスト実施順
 
 1. `cosense_search_pages` の単体テストを追加し、Red を確認する。
@@ -85,6 +88,7 @@
 3. エラーマッピングの単体テストを追加し、Red を確認する。
 4. ウェイト制御のテストを追加し、Red を確認する。
 5. `cosense_search_pages` のコントローラテストを追加し、Red を確認する。
-6. コンテキスト起動テストを追加または更新し、Red を確認する。
-7. 実装後に `./mvnw clean test` を実行し、全件 Green を確認する。
-8. `./mvnw clean package` 後に MCP Inspector で実機確認する。
+6. `cosense_get_page` のコントローラテストを追加し、Red を確認する。
+7. コンテキスト起動テストを追加または更新し、Red を確認する。
+8. 実装後に `./mvnw clean test` を実行し、全件 Green を確認する。
+9. `./mvnw clean package` 後に MCP Inspector で実機確認する。

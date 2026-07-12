@@ -44,14 +44,18 @@ public class CosenseMcpController {
     /**
      * 指定タイトルのページ本文を返す.
      *
+     * <p>本文は Cosense API から取得した全量テキストをそのまま返し、<br>
+     * MCP クライアントが詳細内容を参照できるようにする。
+     *
      * @param title 取得対象のページタイトル
      * @return ページ本文
      */
     @McpTool(name = "cosense_get_page",
              description = """
-                           指定されたタイトルのページ内容（本文テキスト全量）を取得します。
+                           指定されたタイトルの Cosense ページ本文を取得します。
+                           本文は省略せず全量を返し、ページの詳細内容をそのまま参照できます。
                            """)
     public String getPage(@McpToolParam(description = "ページタイトル") String title) {
-        return "text of page " + title;
+        return this.cosenseApiService.getPageContent(title);
     }
 }
