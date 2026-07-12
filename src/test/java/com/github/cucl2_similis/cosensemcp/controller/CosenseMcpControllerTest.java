@@ -3,6 +3,7 @@ package com.github.cucl2_similis.cosensemcp.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.github.cucl2_similis.cosensemcp.service.CosenseApiException;
@@ -66,6 +67,7 @@ class CosenseMcpControllerTest {
         String actual = controller.getPage("Spring Boot");
 
         assertThat(actual).isEqualTo("1行目\n2行目");
+        verify(service).getPageContent("Spring Boot");
     }
 
     // documents/test-spec.md: MG-02
@@ -80,5 +82,6 @@ class CosenseMcpControllerTest {
         assertThatThrownBy(() -> controller.getPage("missing"))
                 .isInstanceOf(CosenseApiException.class)
                 .hasMessage("指定したページが見つかりません");
+        verify(service).getPageContent("missing");
     }
 }

@@ -22,7 +22,7 @@
 - **単体テスト**  
   `CosenseApiService` を対象に、Cosense API 通信結果の変換、エラーマッピング、待機設定の適用を検証する。
 - **コントローラテスト**  
-  `CosenseMcpController` を対象に、MCP ツール公開メソッドが  
+  `CosenseMcpController` を対象に、MCPツール公開メソッドが  
   `CosenseApiService` を使って検索結果やページ本文を返せることを検証する。
 - **コンテキストテスト**  
   `CosenseMcpApplication` の起動と、MCPツール公開に必要な Bean の構成が成立することを確認する。
