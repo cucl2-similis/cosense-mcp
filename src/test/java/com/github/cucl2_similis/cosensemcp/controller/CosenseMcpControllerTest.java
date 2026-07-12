@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 /**
- * documents/test-spec.md の MP-01〜MP-03 に対応する.
+ * documents/test-spec.md の MP-01〜MP-03 と MG-01〜MG-02 に対応する.
  */
 class CosenseMcpControllerTest {
 
@@ -53,5 +53,32 @@ class CosenseMcpControllerTest {
         assertThatThrownBy(() -> controller.searchPages("secret"))
                 .isInstanceOf(CosenseApiException.class)
                 .hasMessage("認証エラー: connect.sidが無効か期限切れです");
+    }
+
+    // documents/test-spec.md: MG-01
+    @Test
+    void getPageReturnsContentFromService() {
+        CosenseApiService service = mock(CosenseApiService.class);
+        when(service.getPageContent("Spring Boot")).thenReturn("1行目\n2行目");
+
+        CosenseMcpController controller = new CosenseMcpController(service);
+
+        String actual = controller.getPage("Spring Boot");
+
+        assertThat(actual).isEqualTo("1行目\n2行目");
+    }
+
+    // documents/test-spec.md: MG-02
+    @Test
+    void getPagePropagatesCosenseApiException() {
+        CosenseApiService service = mock(CosenseApiService.class);
+        when(service.getPageContent("missing"))
+                .thenThrow(new CosenseApiException("指定したページが見つかりません"));
+
+        CosenseMcpController controller = new CosenseMcpController(service);
+
+        assertThatThrownBy(() -> controller.getPage("missing"))
+                .isInstanceOf(CosenseApiException.class)
+                .hasMessage("指定したページが見つかりません");
     }
 }
